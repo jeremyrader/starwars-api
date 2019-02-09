@@ -10,7 +10,7 @@ app.get('/people', async (req, res) => {
 })
 
 app.get('/planets', async (req, res) => {
-    let planets = await request.get('planets')
+    let planets = await fetchAllFromSwapi('planets')
     res.send(planets)
 })
 
