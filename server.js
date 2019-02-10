@@ -29,6 +29,18 @@ app.get('/people', async (req, res) => {
 
 app.get('/planets', async (req, res) => {
     let planets = await fetchAllFromSwapi('planets')
+
+    for (var planet of planets) {
+        let residentNames = []
+
+        for (var resident of planet.residents) {
+            let residentDetails = await request.get(resident, {json: true})
+            residentNames.push(residentDetails.name)
+        }
+
+        planet.residents = residentNames
+    }
+
     res.send(planets)
 })
 
