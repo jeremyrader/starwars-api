@@ -2,7 +2,8 @@ const express = require('express')
 const request = require('request-promise')
 
 const app = express()
-const port = 3000
+
+app.set('port', process.env.PORT || 3000)
 
 app.get('/people', async (req, res) => {
     let people = await fetchAllFromSwapi('people')
@@ -44,7 +45,7 @@ app.get('/planets', async (req, res) => {
     res.send(planets)
 })
 
-app.listen(port, () => console.log(`Server running on port ${port}`))
+app.listen(app.get('port'), () => console.log(`Server running on port ${app.get('port')}`))
 
 const fetchAllFromSwapi = async (resource) => {
 
