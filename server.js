@@ -20,20 +20,37 @@ app.get('/people', wrap(async (req, res, next) => {
     }
 
     if (req.query.sortBy) {
-        people.sort((a,b) => {
 
-            aNum = parseFloat(a[req.query.sortBy].replace(/,/g, ''))
-            bNum = parseFloat(b[req.query.sortBy].replace(/,/g, ''))
+        //Clean up data
+        people = people.map(p => {
 
-            if (isNaN(aNum)) {
-                return 1
-            }
-            else if (isNaN(bNum)) {
-                return -1
-            }
+            //Remove commas before parsing
+            p.height = p.height.replace(/,/g, '')
+            p.mass = p.mass.replace(/,/g, '')
 
-            return aNum - bNum
+            //Set null as default when height or mass are unknown
+            p.height = parseFloat(p.height) || null
+            p.mass = parseFloat(p.mass) || null
+
+            return p
         })
+
+        if (req.query.sortBy === 'name') {
+            people.sort((a, b) => {
+                return a.name > b.name ? 1 : -1
+            })
+        }
+        else {
+            //req.query.sortBy must be height or mass
+            people.sort((a, b) => {
+
+                //Move null values to the bottom of the list
+                if (a[req.query.sortBy] === null) return 1
+                else if (b[req.query.sortBy] === null) return -1
+
+                return a[req.query.sortBy] - b[req.query.sortBy]
+            })
+        }
     }
     
     res.status(200).send(people)
