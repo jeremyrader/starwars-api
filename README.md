@@ -1,2 +1,5 @@
 # starwars-api
-Cleaned up version of the api at https://swapi.co/
+Node.js server that serves as a wrapper for the API at https://swapi.co/
+
+**Usage**
+`npm start`
